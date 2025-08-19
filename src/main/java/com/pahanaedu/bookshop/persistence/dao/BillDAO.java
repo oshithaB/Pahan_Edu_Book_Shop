@@ -1,14 +1,12 @@
-package com.pahanaedu.bookshop.dao;
+package com.pahanaedu.bookshop.persistence.dao;
 
-import com.pahanaedu.bookshop.model.Bill;
-import com.pahanaedu.bookshop.model.BillItem;
-import com.pahanaedu.bookshop.util.DatabaseConnection;
+import com.pahanaedu.bookshop.business.bill.bill.model.Bill;
+import com.pahanaedu.bookshop.business.bill.bill.model.BillItem;
+import com.pahanaedu.bookshop.persistence.resource.resource.util.DatabaseConnection;
 
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
