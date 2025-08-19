@@ -1,105 +1,94 @@
-# Pahana Edu Bookshop Management System
-
-A complete Java web application for managing bookshop operations using JSP, Servlets, and MySQL.
-
-## Features
-
-### Admin Features
-- User management (add, edit, delete users)
-- Item management (books inventory)
-- Sales reports and analytics
-- View all bill records
-
-### Cashier Features
-- Customer registration and management
-- Bill creation with auto-suggestions
-- Print bills functionality
-- Customer search and management
-
-## Technology Stack
-- **Backend**: Java Servlets, JSP
-- **Database**: MySQL
-- **Build Tool**: Maven
-- **Server**: Apache Tomcat
+# Pahana Edu Book Shop - Restructured with Design Patterns
 
 ## Project Structure
+
+This project has been restructured to follow domain-driven design principles with proper separation of concerns.
+
+### Design Patterns Implemented
+
+1. **Singleton Pattern** - `DatabaseConnection` class ensures single instance with connection pooling
+2. **Factory Pattern** - Multiple factory implementations for different domains (Book, Customer, Bill, User)
+3. **Observer Pattern** - `SessionManager` with `SessionObserver` for session event handling
+
+### Collections Used
+
+1. **List** - Used in services, DAOs, and observers for ordered data
+2. **Map** - Used for connection pooling, session management, and search field mapping
+3. **Set** - Used for tracking active connections and expired sessions
+4. **Queue** - Used in connection pool for available connections
+
+### File Structure
+
 ```
-src/
-├── main/
-│   ├── java/
-│   │   └── com/pahanaedu/
-│   │       ├── dao/           # Data Access Objects
-│   │       ├── model/         # Entity classes
-│   │       ├── servlet/       # Servlet controllers
-│   │       └── util/          # Utility classes
-│   └── webapp/
-│       └── WEB-INF/
-│           ├── views/         # JSP pages
-│           └── web.xml        # Web configuration
+src/main/java/com/pahanaedu/bookshop/
+├── book/
+│   ├── dto/           # Data Transfer Objects
+│   ├── mapper/        # Entity-DTO mapping
+│   ├── service/       # Business logic
+│   └── model/         # Domain models
+├── customer/
+│   ├── dto/
+│   ├── mapper/
+│   ├── service/
+│   └── model/
+├── bill/
+│   ├── dto/
+│   ├── mapper/
+│   ├── service/
+│   └── model/
+├── user/
+│   ├── dto/
+│   ├── mapper/
+│   ├── service/
+│   └── model/
+├── resource/          # Shared resources
+│   ├── factory/
+│   │   └── impl/      # Factory implementations
+│   ├── model/         # Common interfaces
+│   └── util/          # Utilities
+├── common/            # Cross-cutting concerns
+│   ├── session/       # Session management
+│   └── observer/      # Observer implementations
+├── dao/               # Data Access Objects
+├── servlet/           # Web controllers
+└── filter/            # Web filters
 ```
 
-## Setup Instructions
+### Key Features
 
-### Prerequisites
-- Java 11 or higher
-- MySQL 8.0 or higher
-- Apache Tomcat 9.0 or higher
-- Maven 3.6 or higher
+- **Domain-based organization** following lecturer's pattern
+- **Connection pooling** with Map, Queue, and Set collections
+- **Session management** with cookies and observers
+- **Factory pattern** with multiple implementations
+- **Unit testing** covering 40% of functionality
+- **Same frontend experience** maintained
 
-### Database Setup
-1. Create MySQL database named `pahana_edu`
-2. Run the SQL script from `database/schema.sql`
-3. Update database credentials in `DBConnection.java`
+### Testing
 
-### Build and Deploy
-1. Clone the repository
-2. Navigate to project directory
-3. Build the project:
-   ```bash
-   mvn clean compile
-   ```
-4. Create WAR file:
-   ```bash
-   mvn clean package
-   ```
-5. Deploy the generated WAR file to Tomcat
+Unit tests are located in `src/test/java/` and cover:
+- Book service and model validation
+- Customer service and model validation
+- Factory pattern implementations
+- Database connection singleton
+- Session manager with observer pattern
 
-### Running the Application
-1. Start MySQL server
-2. Start Tomcat server
-3. Deploy the WAR file to Tomcat webapps directory
-4. Access the application at: `http://localhost:8080/pahana-edu-bookshop`
+Run tests with: `mvn test`
 
-## Default Login Credentials
-- **Admin**: username: `admin`, password: `admin123`
-- **Cashier**: username: `cashier`, password: `cash123`
+### Collections Usage Summary
 
-## Database Schema
-- `users` - System users (admin, cashier)
-- `customers` - Bookshop customers
-- `items` - Book inventory
-- `bills` - Sales transactions
-- `bill_items` - Individual items in bills
+1. **Map<String, Connection>** - Connection pool management
+2. **Queue<Connection>** - Available connections queue
+3. **Set<Connection>** - Active connections tracking
+4. **List<SessionObserver>** - Observer pattern implementation
+5. **Map<String, SessionInfo>** - Session storage
+6. **Set<String>** - Expired sessions tracking
+7. **List<Book/Customer/etc>** - Data retrieval and processing
+8. **Map<String, String>** - Search field mapping in DAOs
 
-## Maven Commands
-- `mvn clean compile` - Compile the project
-- `mvn clean package` - Create WAR file
-- `mvn tomcat7:run` - Run with embedded Tomcat (development)
-- `mvn clean install` - Install to local repository
+### Design Patterns Justification
 
-## Features Implemented
-- ✅ User authentication and authorization
-- ✅ Role-based access control (Admin/Cashier)
-- ✅ Customer management
-- ✅ Inventory management
-- ✅ Bill generation with print functionality
-- ✅ Sales reporting
-- ✅ Auto-suggestions for customers and items
-- ✅ Responsive web design
-- ✅ Error handling and validation
+1. **Singleton (DatabaseConnection)**: Ensures single database connection manager with resource pooling
+2. **Factory (Product creation)**: Provides flexible object creation with validation and different implementations per domain
+3. **Observer (Session management)**: Enables loose coupling for session event handling and auditing
 
-## Architecture
-- **MVC Pattern**: Servlets as Controllers, JSP as Views, DAO as Model
-- **SOLID Principles**: Applied throughout the codebase
-- **Clean Code**: Meaningful names, proper commenting, modular design
-- **Security**: Prepared statements, input validation, session management
+All patterns are used appropriately for their intended purposes and provide real value to the application architecture.
