@@ -19,18 +19,43 @@ public class CustomerDAO {
         this.customerFactory = new CustomerFactoryImpl();
     }
     
-    public List<Customer> getAllCustomers() throws SQLException {
-        List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT * FROM customers WHERE is_active = true ORDER BY name";
-        
+    public Map<Integer, Integer> getUnitsConsumedByCustomer() throws SQLException {
+        Map<Integer, Integer> unitsMap = new HashMap<>();
+        String sql = "SELECT b.customer_id, SUM(i.quantity) AS units " +
+                     "FROM bills b " +
+                     "JOIN bill_items i ON b.id = i.bill_id " +
+                     "WHERE b.customer_id IS NOT NULL " +
+                     "GROUP BY b.customer_id";
         Connection conn = null;
         try {
             conn = dbConnection.getConnection();
             try (PreparedStatement stmt = conn.prepareStatement(sql);
                  ResultSet rs = stmt.executeQuery()) {
-                
                 while (rs.next()) {
-                    customers.add(mapResultSetToCustomer(rs));
+                    unitsMap.put(rs.getInt("customer_id"), rs.getInt("units"));
+                }
+            }
+        } finally {
+            if (conn != null) {
+                dbConnection.returnConnection(conn);
+            }
+        }
+        return unitsMap;
+    }
+
+    public List<Customer> getAllCustomers() throws SQLException {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT * FROM customers WHERE is_active = true ORDER BY name";
+        Map<Integer, Integer> unitsMap = getUnitsConsumedByCustomer();
+        Connection conn = null;
+        try {
+            conn = dbConnection.getConnection();
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Customer customer = mapResultSetToCustomer(rs);
+                    customer.setUnitsConsumed(unitsMap.getOrDefault(customer.getId(), 0));
+                    customers.add(customer);
                 }
             }
         } finally {
@@ -43,7 +68,7 @@ public class CustomerDAO {
     
     public Customer getCustomerById(int id) throws SQLException {
         String sql = "SELECT * FROM customers WHERE id = ?";
-        
+        Map<Integer, Integer> unitsMap = getUnitsConsumedByCustomer();
         Connection conn = null;
         try {
             conn = dbConnection.getConnection();
@@ -52,7 +77,9 @@ public class CustomerDAO {
                 ResultSet rs = stmt.executeQuery();
                 
                 if (rs.next()) {
-                    return mapResultSetToCustomer(rs);
+                    Customer customer = mapResultSetToCustomer(rs);
+                    customer.setUnitsConsumed(unitsMap.getOrDefault(customer.getId(), 0));
+                    return customer;
                 }
             }
         } finally {
@@ -127,7 +154,7 @@ public class CustomerDAO {
     
     public List<Customer> searchCustomers(String searchTerm) throws SQLException {
         List<Customer> customers = new ArrayList<>();
-        
+        Map<Integer, Integer> unitsMap = getUnitsConsumedByCustomer();
         // Use HashMap for search field mapping
         Map<String, String> searchFields = new HashMap<>();
         searchFields.put("name", "Customer Name");
@@ -159,7 +186,9 @@ public class CustomerDAO {
                 
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    customers.add(mapResultSetToCustomer(rs));
+                    Customer customer = mapResultSetToCustomer(rs);
+                    customer.setUnitsConsumed(unitsMap.getOrDefault(customer.getId(), 0));
+                    customers.add(customer);
                 }
             }
         } finally {

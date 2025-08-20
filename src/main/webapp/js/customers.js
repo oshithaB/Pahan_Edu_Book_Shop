@@ -95,6 +95,7 @@ function displayCustomers(customers) {
                     <th>Telephone</th>
                     <th>Email</th>
                     <th>Created Date</th>
+                    <th>Units Consumed</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -110,6 +111,7 @@ function displayCustomers(customers) {
                 <td>${customer.telephone || ''}</td>
                 <td>${customer.email || ''}</td>
                 <td>${customer.createdAt || ''}</td>
+                <td>${customer.unitsConsumed || 0}</td>
                 <td>
                     <a href="customers?action=edit&id=${customer.id}" class="btn btn-warning btn-sm">Edit</a>
                     <span class="admin-only" style="display: none;">

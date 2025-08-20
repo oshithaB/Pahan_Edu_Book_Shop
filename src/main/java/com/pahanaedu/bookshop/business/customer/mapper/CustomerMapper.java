@@ -28,6 +28,7 @@ public class CustomerMapper {
         dto.setTelephone(customer.getTelephone());
         dto.setEmail(customer.getEmail());
         dto.setActive(customer.isActive());
+        dto.setUnitsConsumed(customer.getUnitsConsumed());
         
         if (customer.getCreatedAt() != null) {
             dto.setCreatedAt(customer.getCreatedAt().toString());
@@ -57,6 +58,7 @@ public class CustomerMapper {
         customer.setTelephone(dto.getTelephone());
         customer.setEmail(dto.getEmail());
         customer.setActive(dto.isActive());
+        customer.setUnitsConsumed(dto.getUnitsConsumed());
         
         return customer;
     }
