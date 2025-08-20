@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Date;
 import java.util.Calendar;
 
-
- //DTO for bill/sales reports
-
+/**
+ * DTO for bill/sales reports
+ * Uses the same database connection pattern as existing code
+ */
 public class BillReportDTO extends ReportDTO {
     private List<Bill> bills;
     private BillSummary billSummary;

@@ -16,9 +16,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-
- // Service class for generating reports
-
+/**
+ * Service class for generating reports
+ * Uses the same database connection pattern as existing code
+ */
 public class ReportService {
     private final CustomerDAO customerDAO;
     private final BookDAO bookDAO;
