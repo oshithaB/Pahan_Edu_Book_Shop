@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Services Test - Pahana Edu Book Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Web Services Test Page</h1>
+        <p>This page demonstrates that your JSP frontend is now using the web services! The web services are no longer dead code - they're actively being used.</p>
+        
+        <div class="test-section">
+            <h3>📊 Customer Web Service Test</h3>
+            <button onclick="testCustomerList()">Test Customer List</button>
+            <button onclick="testCustomerSearch()">Test Customer Search</button>
+            <button onclick="testCustomerCount()">Test Customer Count</button>
+            <div id="customerResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📚 Book Web Service Test</h3>
+            <button onclick="testBookList()">Test Book List</button>
+            <button onclick="testBookSearch()">Test Book Search</button>
+            <button onclick="testBookCount()">Test Book Count</button>
+            <div id="bookResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧾 Bill Web Service Test</h3>
+            <button onclick="testBillList()">Test Bill List</button>
+            <button onclick="testBillSearch()">Test Bill Search</button>
+            <button onclick="testBillCount()">Test Bill Count</button>
+            <div id="billResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 How It Works Now</h3>
+            <div class="info">
+                <strong>Before:</strong> Web services existed but were never called. JSP pages used server-side rendering.
+                
+                <strong>Now:</strong> JSP pages make AJAX calls to web services with 'Accept: application/json' header.
+                
+                <strong>Flow:</strong> 
+                1. User visits customers.jsp
+                2. JavaScript loads and calls loadCustomers()
+                3. fetch() sends request with 'Accept: application/json'
+                4. CustomerServlet detects JSON header and calls webService.handleGet()
+                5. CustomerWebService.doGet() processes request and returns JSON
+                6. JavaScript receives JSON and updates the UI dynamically
+                
+                <strong>Result:</strong> Your application is now a true distributed system using web services!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test Customer Web Service
+        async function testCustomerList() {
+            const resultDiv = document.getElementById('customerResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Customer List...';
+            
+            try {
+                const response = await fetch('customers?action=list', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Customer List Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Customer List Test Failed: ${error.message}`;
+            }
+        }
+
+        async function testCustomerSearch() {
+            const resultDiv = document.getElementById('customerResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Customer Search...';
+            
+            try {
+                const response = await fetch('customers?action=search&term=test', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Customer Search Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Customer Search Test Failed: ${error.message}`;
+            }
+        }
+
+        async function testCustomerCount() {
+            const resultDiv = document.getElementById('customerResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Customer Count...';
+            
+            try {
+                const response = await fetch('customers?action=count', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Customer Count Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Customer Count Test Failed: ${error.message}`;
+            }
+        }
+
+        // Test Book Web Service
+        async function testBookList() {
+            const resultDiv = document.getElementById('bookResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Book List...';
+            
+            try {
+                const response = await fetch('books?action=list', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Book List Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Book List Test Failed: ${error.message}`;
+            }
+        }
+
+        async function testBookSearch() {
+            const resultDiv = document.getElementById('bookResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Book Search...';
+            
+            try {
+                const response = await fetch('books?action=search&term=test', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Book Search Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Book Search Test Failed: ${error.message}`;
+            }
+        }
+
+        async function testBookCount() {
+            const resultDiv = document.getElementById('bookResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Book Count...';
+            
+            try {
+                const response = await fetch('books?action=count', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Book Count Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Book Count Test Failed: ${error.message}`;
+            }
+        }
+
+        // Test Bill Web Service
+        async function testBillList() {
+            const resultDiv = document.getElementById('billResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Bill List...';
+            
+            try {
+                const response = await fetch('bills?action=list', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Bill List Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Bill List Test Failed: ${error.message}`;
+            }
+        }
+
+        async function testBillSearch() {
+            const resultDiv = document.getElementById('billResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Bill Search...';
+            
+            try {
+                const response = await fetch('bills?action=search&term=test', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Bill Search Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Bill Search Test Failed: ${error.message}`;
+            }
+        }
+
+        async function testBillCount() {
+            const resultDiv = document.getElementById('billResult');
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing Bill Count...';
+            
+            try {
+                const response = await fetch('bills?action=count', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Bill Count Test Successful!\n\nResponse: ${JSON.stringify(result, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Bill Count Test Failed: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html> 
