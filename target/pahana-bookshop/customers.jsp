@@ -70,6 +70,39 @@
                 <!-- Customers Table -->
                 <div id="customersTableContainer">
                     <!-- Table will be populated by JavaScript -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Account Number</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Telephone</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Units Consumed</th>
+                                <!-- ...existing code... -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="customer" items="${customers}">
+                                <tr>
+                                    <td>${customer.accountNumber}</td>
+                                    <td>${customer.name}</td>
+                                    <td>${customer.address}</td>
+                                    <td>${customer.telephone}</td>
+                                    <td>${customer.email}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${customer.active}">Active</c:when>
+                                            <c:otherwise>Inactive</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>${customer.unitsConsumed}</td>
+                                    <!-- ...existing code... -->
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
