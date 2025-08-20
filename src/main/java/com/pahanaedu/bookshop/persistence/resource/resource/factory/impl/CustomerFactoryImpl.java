@@ -4,9 +4,10 @@ import com.pahanaedu.bookshop.business.customer.model.Customer;
 import com.pahanaedu.bookshop.persistence.resource.resource.factory.ProductFactory;
 import com.pahanaedu.bookshop.persistence.resource.resource.model.Product;
 
-
- // Concrete Factory for Customer products
-
+/**
+ * Concrete Factory for Customer products
+ * Implements Factory Pattern for creating Customer objects
+ */
 public class CustomerFactoryImpl extends ProductFactory {
     
     public static final String CUSTOMER_TYPE = "customer";

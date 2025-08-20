@@ -44,18 +44,38 @@ public class BookServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null) action = "list";
 
+        // Get user from session
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        boolean isAdmin = user != null && "ADMIN".equalsIgnoreCase(user.getRole());
+
         try {
             switch (action) {
                 case "list":
                     listBooks(request, response);
                     break;
                 case "add":
+                    if (!isAdmin) {
+                        request.setAttribute("error", "Only admins can add books.");
+                        listBooks(request, response);
+                        return;
+                    }
                     showAddForm(request, response);
                     break;
                 case "edit":
+                    if (!isAdmin) {
+                        request.setAttribute("error", "Only admins can edit books.");
+                        listBooks(request, response);
+                        return;
+                    }
                     showEditForm(request, response);
                     break;
                 case "delete":
+                    if (!isAdmin) {
+                        request.setAttribute("error", "Only admins can delete books.");
+                        listBooks(request, response);
+                        return;
+                    }
                     deleteBook(request, response);
                     break;
                 case "search":
@@ -85,12 +105,27 @@ public class BookServlet extends HttpServlet {
 
         String action = request.getParameter("action");
 
+        // Get user from session
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        boolean isAdmin = user != null && "ADMIN".equalsIgnoreCase(user.getRole());
+
         try {
             switch (action) {
                 case "add":
+                    if (!isAdmin) {
+                        request.setAttribute("error", "Only admins can add books.");
+                        listBooks(request, response);
+                        return;
+                    }
                     addBook(request, response);
                     break;
                 case "edit":
+                    if (!isAdmin) {
+                        request.setAttribute("error", "Only admins can edit books.");
+                        listBooks(request, response);
+                        return;
+                    }
                     updateBook(request, response);
                     break;
                 default:
