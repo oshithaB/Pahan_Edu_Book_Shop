@@ -1,0 +1,6 @@
+com\pahanaedu\bookshop\customer\service\CustomerServiceTest.class
+com\pahanaedu\bookshop\resource\util\DatabaseConnectionTest.class
+com\pahanaedu\bookshop\book\service\BookServiceTest.class
+com\pahanaedu\bookshop\common\session\SessionManagerTest.class
+com\pahanaedu\bookshop\common\session\SessionManagerTest$TestSessionObserver.class
+com\pahanaedu\bookshop\resource\factory\impl\BookFactoryImplTest.class

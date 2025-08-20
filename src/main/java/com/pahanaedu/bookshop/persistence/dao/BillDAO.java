@@ -256,6 +256,25 @@ public class BillDAO {
         }
     }
     
+    public List<Bill> searchBillsByDateRange(String from, String to) {
+        List<Bill> bills = new ArrayList<>();
+        String sql = "SELECT * FROM bills WHERE created_at >= ? AND created_at <= ?";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, from);
+            stmt.setString(2, to);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Bill bill = new Bill();
+                // ...populate bill fields from ResultSet...
+                bills.add(bill);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bills;
+    }
+    
     private Bill mapResultSetToBill(ResultSet rs) throws SQLException {
         Bill bill = new Bill();
         bill.setId(rs.getInt("id"));
